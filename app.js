@@ -18,21 +18,26 @@ app.use(express.urlencoded({ extended: false }));
 app.set('view engine', 'ejs');
 
 app.post('/task', (req, res) => {
-  tasks.push({
-    title: req.body.task,
-    done: false,
-  });
-
+  if (req.body.task) {
+    tasks.push({
+      title: req.body.task,
+      done: false,
+    });
+  }
   res.redirect('/');
 });
 
 app.get('/task/:id/done', (req, res) => {
-  tasks[req.params.id].done = true;
+  if (tasks[req.params.id]) {
+    tasks[req.params.id].done = true;
+  }
   res.redirect('/');
 });
 
 app.get('/task/:id/delete', (req, res) => {
-  tasks.splice(req.params.id, 1);
+  if (tasks[req.params.id]) {
+    tasks.splice(req.params.id, 1);
+  }
   res.redirect('/');
 });
 

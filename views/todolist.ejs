@@ -6,7 +6,13 @@
   <body>
     <h1>Todo List</h1>
 
+    <form method="POST" action="/task">
+      <input type="text" placeholder="New task" name="task" autofocus>
+      <button type="submit">Add</button>
+    </form>
+
     <h3>Tasks</h3>
+
     <ul>
       <% tasks.forEach((task) => { %>
         <% if (task.done) { %>

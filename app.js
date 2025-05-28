@@ -13,8 +13,6 @@ const tasks = [
   }
 ];
 
-console.log(tasks);
-
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.set('view engine', 'ejs');
@@ -25,6 +23,16 @@ app.post('/task', (req, res) => {
     done: false,
   });
 
+  res.redirect('/');
+});
+
+app.get('/task/:id/done', (req, res) => {
+  tasks[req.params.id].done = true;
+  res.redirect('/');
+});
+
+app.get('/task/:id/delete', (req, res) => {
+  tasks.splice(req.params.id, 1);
   res.redirect('/');
 });
 

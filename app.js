@@ -1,25 +1,21 @@
 const express = require('express');
+const session = require('express-session');
 const app = express();
 const port = 3000;
 
-const tasks = [
-  {
-    title: 'Learn to code',
-    done: false,
-  },
-  {
-    title: 'Test',
-    done: false,
-  }
-];
-
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+app.use(session({
+  secret: 'test',
+  resave: false,
+  saveUninitialized: true,
+}));
+
 app.set('view engine', 'ejs');
 
 app.post('/task', (req, res) => {
   if (req.body.task) {
-    tasks.push({
+    req.session.tasks.push({
       title: req.body.task,
       done: false,
     });
@@ -28,21 +24,24 @@ app.post('/task', (req, res) => {
 });
 
 app.get('/task/:id/done', (req, res) => {
-  if (tasks[req.params.id]) {
-    tasks[req.params.id].done = true;
+  if (req.session.tasks[req.params.id]) {
+    req.session.tasks[req.params.id].done = true;
   }
   res.redirect('/');
 });
 
 app.get('/task/:id/delete', (req, res) => {
-  if (tasks[req.params.id]) {
-    tasks.splice(req.params.id, 1);
+  if (req.session.tasks[req.params.id]) {
+    req.session.tasks.splice(req.params.id, 1);
   }
   res.redirect('/');
 });
 
 app.get('/', (req, res) => {
-  res.render('todoList', { tasks });
+  if (!req.session.tasks) {
+      req.session.tasks = [];
+  }
+  res.render('todoList', { tasks: req.session.tasks });
 });
 
 app.listen(port, () => {

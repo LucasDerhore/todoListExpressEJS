@@ -9,7 +9,7 @@ const tasks = [
   },
   {
     title: 'Test',
-    done: true,
+    done: false,
   }
 ];
 
@@ -18,7 +18,7 @@ console.log(tasks);
 app.set('view engine', 'ejs');
 
 app.get('/', (req, res) => {
-  res.render('todoList');
+  res.render('todoList', { tasks });
 });
 
 app.listen(port, () => {
